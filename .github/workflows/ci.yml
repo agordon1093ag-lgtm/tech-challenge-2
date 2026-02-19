@@ -41,6 +41,11 @@ jobs:
         docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
     
+    # THIS IS THE MISSING STEP - ADD IT HERE
+    - name: Update Helm chart values
+      run: |
+        sed -i "s/tag:.*/tag: \"${{ github.sha }}\"/" hello-world-chart/values.yaml
+    
     - name: Commit updated Helm values
       run: |
         git config --global user.name "GitHub Actions"
