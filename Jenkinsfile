@@ -7,6 +7,10 @@ pipeline {
         ECR_REPO = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/hello-world-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
         CLUSTER_NAME = 'tech-challenge-cluster'
+        
+        // Jenkins credentials
+        AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
     }
     
     stages {
