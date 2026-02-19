@@ -12,6 +12,12 @@ override.tf.json
 *_override.tf.json
 .terraform.lock.hcl
 
+# Large files
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/current-state.json
+
 # OS files
 .DS_Store
 Thumbs.db
