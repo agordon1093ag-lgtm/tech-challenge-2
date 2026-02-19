@@ -3,7 +3,6 @@ replicaCount: 1
 
 # Image configuration
 image:
-  tag: "latest"
   repository: 740838937919.dkr.ecr.us-east-2.amazonaws.com/hello-world-app
   pullPolicy: Always
   tag: "latest"
@@ -38,4 +37,4 @@ nodeSelector: {}
 tolerations: []
 
 # Affinity (if needed)
-affinity: {}tag: "latest"
+affinity: {}
