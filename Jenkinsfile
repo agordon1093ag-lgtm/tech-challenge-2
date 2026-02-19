@@ -8,9 +8,8 @@ pipeline {
         IMAGE_TAG = "${BUILD_NUMBER}"
         CLUSTER_NAME = 'tech-challenge-cluster'
         
-        // Jenkins credentials
-        AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+        // REMOVED: AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+        // The AWS CLI will automatically use the IAM role attached to the EC2 instance
     }
     
     stages {
@@ -67,4 +66,3 @@ pipeline {
         }
     }
 }
-EOF
