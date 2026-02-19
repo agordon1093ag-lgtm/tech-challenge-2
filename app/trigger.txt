@@ -1,0 +1,1 @@
+Trigger Argo CD setup
