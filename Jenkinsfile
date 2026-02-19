@@ -1,5 +1,3 @@
-# Open Jenkinsfile in VS Code or use cat to replace it
-cat > Jenkinsfile << 'EOF'
 pipeline {
     agent any
     
