@@ -1,0 +1,53 @@
+name: CI - Build and Push to ECR
+
+on:
+  push:
+    branches: [ gitops ]
+    paths:
+      - 'app/**'
+      - 'Dockerfile'
+      - 'requirements.txt'
+
+env:
+  AWS_REGION: us-east-2
+  ECR_REPOSITORY: hello-world-app
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./app
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+    
+    - name: Update Helm chart values
+      run: |
+        sed -i "s/tag:.*/tag: \"${{ github.sha }}\"/" hello-world-chart/values.yaml
+    
+    - name: Commit updated Helm values
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "Update image tag to ${{ github.sha }}"
+        branch: gitops
+        file_pattern: hello-world-chart/values.yaml
