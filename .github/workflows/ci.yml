@@ -51,3 +51,9 @@ jobs:
         commit_message: "Update image tag to ${{ github.sha }}"
         branch: gitops
         file_pattern: hello-world-chart/values.yaml
+        commit_user_name: github-actions[bot]
+        commit_user_email: actions@github.com
+        commit_author: GitHub Actions <actions@github.com>
+        push_options: '--force'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITOPS_TOKEN }}
